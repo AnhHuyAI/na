@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Xác nhận đặt hàng</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #2c3e50;">Xin chào {{ booking.customer_name }},</h2>
+
+        <p>Cảm ơn bạn đã đặt hàng tại <strong>{{ shop_name }}</strong>!</p>
+
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <h3 style="margin-top: 0;">Mã đơn hàng: #{{ booking.booking_code }}</h3>
+            <p><strong>Trạng thái:</strong> <span style="color: #f39c12;">Chờ duyệt</span></p>
+        </div>
+
+        <h4>Thông tin thuê:</h4>
+        <ul>
+            <li><strong>Ngày nhận:</strong> {{ booking.rental_start.strftime('%d/%m/%Y %H:%M') }}</li>
+            <li><strong>Ngày trả:</strong> {{ booking.rental_end.strftime('%d/%m/%Y %H:%M') }}</li>
+            <li><strong>Tổng tiền:</strong> {{ "{:,}".format(booking.total_price|int) }}đ</li>
+        </ul>
+
+        <h4>Sản phẩm:</h4>
+        <ul>
+            {% for item in booking.items %}
+            <li>{{ item.product_name }} - {{ "{:,}".format(item.item_total|int) }}đ</li>
+            {% endfor %}
+        </ul>
+
+        <p style="background: #e8f5e9; padding: 10px; border-left: 4px solid #4caf50;">
+            Chúng tôi sẽ xét duyệt đơn trong vòng 1-2 giờ và gửi email thông báo.
+        </p>
+
+        <p>Nếu có thắc mắc, vui lòng liên hệ:</p>
+        <ul>
+            <li>Điện thoại: {{ shop_phone }}</li>
+            <li>Email: {{ shop_email }}</li>
+        </ul>
+
+        <p>Trân trọng,<br><strong>{{ shop_name }}</strong></p>
+    </div>
+</body>
+</html>
