@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Đánh giá {{ product.name }} - {{ SHOP_NAME }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Đánh giá: {{ product.name }}</h1>
+
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Số sao</label>
+        <div>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="rating" id="rating1" value="1" required>
+                <label class="btn btn-outline-warning" for="rating1">1 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="rating2" value="2">
+                <label class="btn btn-outline-warning" for="rating2">2 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="rating3" value="3">
+                <label class="btn btn-outline-warning" for="rating3">3 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="rating4" value="4">
+                <label class="btn btn-outline-warning" for="rating4">4 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="rating5" value="5">
+                <label class="btn btn-outline-warning" for="rating5">5 ⭐</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="comment" class="form-label">Nhận xét</label>
+        <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+    <a href="{{ url_for('customer.product_detail', slug=product.slug) }}" class="btn btn-secondary">Hủy</a>
+</form>
+{% endblock %}

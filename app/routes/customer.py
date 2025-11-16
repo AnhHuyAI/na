@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from datetime import datetime
 from app import db
-from app.models import Category, Product, Booking, DiscountCode, Review
+from app.models import Category, Product, Booking, BookingItem, DiscountCode, Review
 from app.services import PriceCalculator, BookingService, DiscountService
 
 customer_bp = Blueprint('customer', __name__)

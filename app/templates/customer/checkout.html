@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Thanh toán - {{ SHOP_NAME }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Thanh toán</h1>
+
+<form method="POST">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header"><h5 class="mb-0">Thời gian thuê</h5></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="rental_start" class="form-label">Ngày giờ nhận</label>
+                            <input type="datetime-local" class="form-control" id="rental_start" name="rental_start" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="rental_end" class="form-label">Ngày giờ trả</label>
+                            <input type="datetime-local" class="form-control" id="rental_end" name="rental_end" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header"><h5 class="mb-0">Thông tin cọc</h5></div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="id_card_number" class="form-label">Số CCCD/CMND</label>
+                        <input type="text" class="form-control" id="id_card_number" name="id_card_number" required>
+                        <small class="text-muted">Dùng để cọc, không thu tiền</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Địa chỉ (tùy chọn)</label>
+                        <textarea class="form-control" id="address" name="address" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Ghi chú (tùy chọn)</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header"><h5 class="mb-0">Mã giảm giá</h5></div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="discount_code" placeholder="Nhập mã giảm giá">
+                        <button class="btn btn-outline-secondary" type="button">Áp dụng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header"><h5 class="mb-0">Sản phẩm</h5></div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for product in products %}
+                        <li class="mb-2">
+                            <strong>{{ product.name }}</strong><br>
+                            <small>{{ "{:,}".format(product.price_base|int) }}đ/ngày ({{ 'Tăng dần' if product.product_type == 'clothing' else 'Cố định' }})</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Đặt hàng</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

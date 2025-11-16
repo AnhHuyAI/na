@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bạn đã nhận đồ</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #27ae60;">Bạn đã nhận đồ thành công!</h2>
+
+        <p>Xin chào {{ booking.customer_name }},</p>
+
+        <p>Đơn hàng <strong>#{{ booking.booking_code }}</strong> - Bạn đã nhận đồ thành công!</p>
+
+        <div style="background: #e8f5e9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <h4 style="margin-top: 0;">Thông tin thuê:</h4>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li><strong>Ngày trả:</strong> {{ booking.rental_end.strftime('%d/%m/%Y %H:%M') }}</li>
+                <li><strong>Tổng ngày thuê:</strong> {{ booking.total_days }} ngày</li>
+                <li><strong>Tổng tiền:</strong> {{ "{:,}".format(booking.total_price|int) }}đ</li>
+            </ul>
+        </div>
+
+        <div style="background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107;">
+            <strong>Lưu ý:</strong>
+            <ul>
+                <li>Vui lòng giữ gìn đồ cẩn thận</li>
+                <li>Trả đồ đúng hạn để tránh phí phạt</li>
+                <li>Kiểm tra kỹ trước khi trả</li>
+            </ul>
+        </div>
+
+        <p>Chúc bạn có trải nghiệm tuyệt vời!</p>
+
+        <p>Liên hệ hỗ trợ: <strong>{{ shop_phone }}</strong></p>
+
+        <p>Trân trọng,<br><strong>{{ shop_name }}</strong></p>
+    </div>
+</body>
+</html>

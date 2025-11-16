@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Đơn hàng #{{ booking.booking_code }} - {{ SHOP_NAME }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Đơn hàng #{{ booking.booking_code }}</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Trạng thái: <span class="badge bg-{{ booking.get_status_badge_class() }}">{{ booking.get_status_display() }}</span></h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Thời gian thuê:</strong> {{ booking.rental_start.strftime('%d/%m/%Y %H:%M') }} - {{ booking.rental_end.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p><strong>Tổng ngày:</strong> {{ booking.total_days }} ngày</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Sản phẩm</h5></div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Mã bộ đồ</th>
+                            <th>Giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in booking.items %}
+                        <tr>
+                            <td>{{ item.product_name }}</td>
+                            <td>{{ item.inventory_item.item_code if item.inventory_item else 'Chưa gán' }}</td>
+                            <td>{{ "{:,}".format(item.item_total|int) }}đ</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Tổng kết</h5></div>
+            <div class="card-body">
+                <p>Subtotal: {{ "{:,}".format(booking.subtotal|int) }}đ</p>
+                <p>Giảm giá: -{{ "{:,}".format(booking.discount_amount|int) }}đ</p>
+                <p>Phạt: +{{ "{:,}".format(booking.penalty_amount|int) }}đ</p>
+                <hr>
+                <h4>Tổng: {{ "{:,}".format(booking.get_final_amount()|int) }}đ</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

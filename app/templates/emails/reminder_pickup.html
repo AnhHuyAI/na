@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nhắc nhở nhận đồ</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #3498db;">Nhắc nhở: Nhận đồ vào ngày mai</h2>
+
+        <p>Xin chào {{ booking.customer_name }},</p>
+
+        <p>Nhắc nhở: Bạn có đơn hàng <strong>#{{ booking.booking_code }}</strong> sẽ nhận đồ <strong>VÀO NGÀY MAI</strong>!</p>
+
+        <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <h3 style="margin-top: 0;">Thông tin nhận đồ:</h3>
+            <ul>
+                <li><strong>Thời gian:</strong> {{ booking.rental_start.strftime('%d/%m/%Y %H:%M') }}</li>
+                <li><strong>Địa chỉ:</strong> {{ shop_address }}</li>
+            </ul>
+        </div>
+
+        <h4>Chuẩn bị:</h4>
+        <ul>
+            <li>✓ CMND/CCCD số <strong>{{ booking.customer_id_card }}</strong></li>
+            <li>✓ Tiền thuê: <strong>{{ "{:,}".format(booking.total_price|int) }}đ</strong></li>
+        </ul>
+
+        <p style="background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107;">
+            Vui lòng đến đúng giờ. Nếu có thay đổi, liên hệ: <strong>{{ shop_phone }}</strong>
+        </p>
+
+        <p>Hẹn gặp bạn!</p>
+
+        <p>Trân trọng,<br><strong>{{ shop_name }}</strong></p>
+    </div>
+</body>
+</html>

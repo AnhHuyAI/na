@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Thêm phạt - Đơn #{{ booking.booking_code }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Thêm phạt - Đơn #{{ booking.booking_code }}</h1>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="penalty_type" class="form-label">Loại phạt</label>
+        <select class="form-select" id="penalty_type" name="penalty_type" required>
+            <option value="">-- Chọn loại --</option>
+            <option value="damage">Hư hỏng</option>
+            <option value="lost">Mất</option>
+            <option value="late">Trả trễ</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="amount" class="form-label">Số tiền phạt (đ)</label>
+        <input type="number" class="form-control" id="amount" name="amount" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="reason" class="form-label">Lý do chi tiết</label>
+        <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm phạt</button>
+    <a href="{{ url_for('admin.booking_detail', booking_id=booking.id) }}" class="btn btn-secondary">Hủy</a>
+</form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý mã giảm giá - Admin{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Quản lý mã giảm giá</h1>
+
+<a href="{{ url_for('admin.add_discount') }}" class="btn btn-primary mb-4">+ Tạo mã mới</a>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Loại</th>
+                <th>Giá trị</th>
+                <th>Đã dùng/Giới hạn</th>
+                <th>Thời hạn</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for code in codes %}
+            <tr>
+                <td><strong>{{ code.code }}</strong></td>
+                <td>{{ code.discount_type }}</td>
+                <td>{{ code.get_display_value() }}</td>
+                <td>{{ code.used_count }} / {{ code.usage_limit if code.usage_limit else '∞' }}</td>
+                <td>{{ code.valid_from.strftime('%d/%m/%Y') }} - {{ code.valid_until.strftime('%d/%m/%Y') }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if code.is_valid() else 'secondary' }}">
+                        {{ 'Valid' if code.is_valid() else 'Expired' }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

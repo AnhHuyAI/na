@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nhắc nhở trả đồ</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #f39c12;">Nhắc nhở: Trả đồ vào ngày mai</h2>
+
+        <p>Xin chào {{ booking.customer_name }},</p>
+
+        <p>Nhắc nhở: Bạn cần <strong style="color: #f39c12;">TRẢ ĐỒ VÀO NGÀY MAI</strong>!</p>
+
+        <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #f39c12; margin: 20px 0;">
+            <h3 style="margin-top: 0;">Thông tin trả đồ:</h3>
+            <ul>
+                <li><strong>Đơn hàng:</strong> #{{ booking.booking_code }}</li>
+                <li><strong>Thời gian trả:</strong> {{ booking.rental_end.strftime('%d/%m/%Y %H:%M') }}</li>
+                <li><strong>Địa chỉ:</strong> {{ shop_address }}</li>
+            </ul>
+        </div>
+
+        <h4>Lưu ý:</h4>
+        <ul>
+            <li>✓ Kiểm tra đồ trước khi trả (đầy đủ, sạch sẽ)</li>
+            <li>✓ Trả đúng giờ để tránh phí phạt</li>
+            <li>✓ Mang theo CCCD để nhận lại</li>
+        </ul>
+
+        <p>Nếu cần hỗ trợ, liên hệ: <strong>{{ shop_phone }}</strong></p>
+
+        <p>Cảm ơn bạn!</p>
+
+        <p>Trân trọng,<br><strong>{{ shop_name }}</strong></p>
+    </div>
+</body>
+</html>

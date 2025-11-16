@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - {{ SHOP_NAME }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Admin Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Tổng đơn hàng</h5>
+                <p class="display-4">{{ total_bookings }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Chờ duyệt</h5>
+                <p class="display-4">{{ pending_bookings }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Đang thuê</h5>
+                <p class="display-4">{{ renting_bookings }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Hoàn thành</h5>
+                <p class="display-4">{{ completed_bookings }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Đơn hàng gần đây</h5></div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in recent_bookings %}
+                        <tr>
+                            <td><a href="{{ url_for('admin.booking_detail', booking_id=booking.id) }}">{{ booking.booking_code }}</a></td>
+                            <td>{{ booking.customer_name }}</td>
+                            <td><span class="badge bg-{{ booking.get_status_badge_class() }}">{{ booking.get_status_display() }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Thống kê kho</h5></div>
+            <div class="card-body">
+                <p>Tổng sản phẩm: <strong>{{ total_products }}</strong></p>
+                <p>Tổng bộ đồ: <strong>{{ total_inventory }}</strong></p>
+                <p>Còn available: <strong>{{ available_inventory }}</strong></p>
+                <p>Doanh thu tháng này: <strong>{{ "{:,}".format(monthly_revenue|int) }}đ</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if late_bookings %}
+<div class="alert alert-danger">
+    <h5>⚠️ Có {{ late_bookings|length }} đơn quá hạn!</h5>
+    <ul>
+        {% for booking in late_bookings %}
+        <li><a href="{{ url_for('admin.booking_detail', booking_id=booking.id) }}">{{ booking.booking_code }}</a> - {{ booking.customer_name }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}

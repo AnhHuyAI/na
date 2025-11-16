@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Đơn hàng quá hạn</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #e74c3c;">⚠️ Đơn #{{ booking.booking_code }} đã quá hạn</h2>
+
+        <p>Xin chào {{ booking.customer_name }},</p>
+
+        <p>Đơn hàng của bạn đã <strong style="color: #e74c3c;">QUÁ HẠN TRẢ</strong>.</p>
+
+        <div style="background: #ffebee; padding: 15px; border-radius: 5px; border-left: 4px solid #e74c3c; margin: 20px 0;">
+            <p style="margin: 0;"><strong>Thời gian trả dự kiến:</strong> {{ booking.rental_end.strftime('%d/%m/%Y %H:%M') }}</p>
+            <p style="margin: 10px 0 0 0;"><strong>Hiện tại:</strong> Đã quá hạn</p>
+        </div>
+
+        <p style="font-size: 18px; color: #e74c3c;"><strong>Vui lòng liên hệ NGAY:</strong></p>
+        <ul>
+            <li>Điện thoại: <strong>{{ shop_phone }}</strong></li>
+            <li>Email: <strong>{{ shop_email }}</strong></li>
+        </ul>
+
+        <p style="background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107;">
+            <strong>Lưu ý:</strong> Có thể phát sinh phí phạt trễ hạn.
+        </p>
+
+        <p>Mong bạn sắp xếp trả đồ sớm nhất!</p>
+
+        <p>Trân trọng,<br><strong>{{ shop_name }}</strong></p>
+    </div>
+</body>
+</html>

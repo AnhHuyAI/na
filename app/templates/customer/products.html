@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Sản phẩm - {{ SHOP_NAME }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Sản phẩm</h1>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <span class="badge bg-info">{{ product.product_type }}</span>
+                <h5 class="card-title mt-2">{{ product.name }}</h5>
+                <p class="card-text">
+                    <strong>{{ "{:,}".format(product.price_base|int) }}đ</strong>/ngày<br>
+                    {% if product.is_available() %}
+                        <span class="text-success">Còn {{ product.get_available_count() }} bộ</span>
+                    {% else %}
+                        <span class="text-danger">Hết hàng</span>
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('customer.product_detail', slug=product.slug) }}" class="btn btn-primary btn-sm">Chi tiết</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <p class="text-center text-muted">Không có sản phẩm nào.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

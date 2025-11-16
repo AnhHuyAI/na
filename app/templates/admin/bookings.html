@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý đơn hàng - Admin{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Quản lý đơn hàng</h1>
+
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {{ 'active' if status_filter == 'all' else '' }}" href="{{ url_for('admin.bookings', status='all') }}">Tất cả</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ 'active' if status_filter == 'pending' else '' }}" href="{{ url_for('admin.bookings', status='pending') }}">Chờ duyệt</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ 'active' if status_filter == 'approved' else '' }}" href="{{ url_for('admin.bookings', status='approved') }}">Đã duyệt</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ 'active' if status_filter == 'renting' else '' }}" href="{{ url_for('admin.bookings', status='renting') }}">Đang thuê</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ 'active' if status_filter == 'completed' else '' }}" href="{{ url_for('admin.bookings', status='completed') }}">Hoàn thành</a>
+    </li>
+</ul>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã đơn</th>
+                <th>Khách hàng</th>
+                <th>Thời gian thuê</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td><strong>{{ booking.booking_code }}</strong></td>
+                <td>{{ booking.customer_name }}<br><small>{{ booking.customer_phone }}</small></td>
+                <td>{{ booking.rental_start.strftime('%d/%m/%Y') }} - {{ booking.rental_end.strftime('%d/%m/%Y') }}</td>
+                <td>{{ "{:,}".format(booking.get_final_amount()|int) }}đ</td>
+                <td><span class="badge bg-{{ booking.get_status_badge_class() }}">{{ booking.get_status_display() }}</span></td>
+                <td>
+                    <a href="{{ url_for('admin.booking_detail', booking_id=booking.id) }}" class="btn btn-sm btn-primary">Chi tiết</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center">Không có đơn hàng nào.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Giỏ hàng - {{ SHOP_NAME }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Giỏ hàng</h1>
+
+{% if products %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Giá base</th>
+                <th>Loại</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ "{:,}".format(product.price_base|int) }}đ/ngày</td>
+                <td>{{ 'Quần áo' if product.product_type == 'clothing' else 'Phụ kiện' }}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="removeFromCart({{ product.id }})">Xóa</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="text-end">
+    <a href="{{ url_for('customer.checkout') }}" class="btn btn-primary btn-lg">Tiến hành đặt hàng</a>
+</div>
+{% else %}
+<div class="alert alert-info">
+    Giỏ hàng trống. <a href="{{ url_for('customer.products') }}">Xem sản phẩm</a>
+</div>
+{% endif %}
+
+<script>
+function removeFromCart(productId) {
+    fetch(`/cart/remove/${productId}`, {method: 'POST'})
+        .then(r => r.json())
+        .then(data => {
+            if(data.success) {
+                location.reload();
+            }
+        });
+}
+</script>
+{% endblock %}

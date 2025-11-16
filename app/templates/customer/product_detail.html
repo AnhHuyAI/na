@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - {{ SHOP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>{{ product.name }}</h1>
+        <p class="text-muted">{{ product.category.name }}</p>
+
+        <h3 class="mt-4">{{ "{:,}".format(product.price_base|int) }}đ/ngày</h3>
+
+        <div class="my-4">
+            <span class="badge bg-{{ 'info' if product.product_type == 'clothing' else 'secondary' }}">
+                {{ 'Quần áo' if product.product_type == 'clothing' else 'Phụ kiện' }}
+            </span>
+            {% if product.is_available() %}
+                <span class="badge bg-success">Còn {{ product.get_available_count() }} bộ</span>
+            {% else %}
+                <span class="badge bg-danger">Hết hàng</span>
+            {% endif %}
+        </div>
+
+        <p>{{ product.description }}</p>
+
+        {% if product.is_available() %}
+        <form action="{{ url_for('customer.add_to_cart', product_id=product.id) }}" method="POST" id="addToCartForm">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+            </button>
+        </form>
+        {% else %}
+        <button class="btn btn-secondary" disabled>Hết hàng</button>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Lưu ý</h5>
+            </div>
+            <div class="card-body">
+                {% if product.product_type == 'clothing' %}
+                <p><strong>Giá tăng dần theo ngày:</strong></p>
+                <ul>
+                    <li>Ngày 1: {{ "{:,}".format(product.price_base|int) }}đ</li>
+                    <li>Ngày 2: {{ "{:,}".format((product.price_base|int) + 10000) }}đ</li>
+                    <li>Ngày 3-4: {{ "{:,}".format((product.price_base|int) + 20000) }}đ</li>
+                    <li>...</li>
+                </ul>
+                {% else %}
+                <p><strong>Giá cố định:</strong> {{ "{:,}".format(product.price_base|int) }}đ/ngày</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    fetch(this.action, {method: 'POST'})
+        .then(r => r.json())
+        .then(data => {
+            if(data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        });
+});
+</script>
+{% endblock %}

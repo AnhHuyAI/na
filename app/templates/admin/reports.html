@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Báo cáo doanh thu - Admin{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Báo cáo doanh thu</h1>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Tổng doanh thu</h5>
+                <p class="display-5">{{ "{:,}".format(total_revenue|int) }}đ</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Tổng giảm giá</h5>
+                <p class="display-5">{{ "{:,}".format(total_discount|int) }}đ</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Số đơn hoàn thành</h5>
+                <p class="display-5">{{ bookings|length }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><h5 class="mb-0">Chi tiết đơn hoàn thành</h5></div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Khách</th>
+                        <th>Ngày</th>
+                        <th>Tổng tiền</th>
+                        <th>Giảm giá</th>
+                        <th>Phạt</th>
+                        <th>Doanh thu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.booking_code }}</td>
+                        <td>{{ booking.customer_name }}</td>
+                        <td>{{ booking.updated_at.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ "{:,}".format(booking.total_price|int) }}đ</td>
+                        <td>-{{ "{:,}".format(booking.discount_amount|int) }}đ</td>
+                        <td>+{{ "{:,}".format(booking.penalty_amount|int) }}đ</td>
+                        <td><strong>{{ "{:,}".format(booking.get_final_amount()|int) }}đ</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

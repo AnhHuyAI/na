@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Đơn hàng bị từ chối</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #e74c3c;">Đơn hàng #{{ booking.booking_code }} bị từ chối</h2>
+
+        <p>Xin chào {{ booking.customer_name }},</p>
+
+        <p>Rất tiếc, đơn hàng của bạn không thể xử lý được.</p>
+
+        <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; margin: 20px 0;">
+            <strong>Lý do:</strong><br>
+            {{ reason }}
+        </div>
+
+        <h4>Thông tin đơn hàng:</h4>
+        <ul>
+            <li><strong>Mã đơn:</strong> #{{ booking.booking_code }}</li>
+            <li><strong>Ngày đặt:</strong> {{ booking.created_at.strftime('%d/%m/%Y %H:%M') }}</li>
+        </ul>
+
+        <p>Bạn có thể:</p>
+        <ul>
+            <li>Đặt lại với thông tin chính xác</li>
+            <li>Liên hệ: <strong>{{ shop_phone }}</strong> để được hỗ trợ</li>
+        </ul>
+
+        <p>Xin lỗi vì sự bất tiện này.</p>
+
+        <p>Trân trọng,<br><strong>{{ shop_name }}</strong></p>
+    </div>
+</body>
+</html>

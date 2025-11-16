@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý kho - Admin{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Quản lý kho</h1>
+
+<a href="{{ url_for('admin.add_inventory') }}" class="btn btn-primary mb-4">+ Thêm bộ đồ mới</a>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã bộ đồ</th>
+                <th>Sản phẩm</th>
+                <th>Size</th>
+                <th>Trạng thái</th>
+                <th>Số lần thuê</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td><strong>{{ item.item_code }}</strong></td>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.size }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if item.status == 'available' else 'warning' if item.status == 'rented' else 'secondary' }}">
+                        {{ item.status }}
+                    </span>
+                </td>
+                <td>{{ item.total_rentals }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.update_inventory_status', item_id=item.id) }}" class="d-inline">
+                        <select class="form-select form-select-sm d-inline w-auto" name="status" onchange="this.form.submit()">
+                            <option value="available" {{ 'selected' if item.status == 'available' else '' }}>Available</option>
+                            <option value="rented" {{ 'selected' if item.status == 'rented' else '' }}>Rented</option>
+                            <option value="maintenance" {{ 'selected' if item.status == 'maintenance' else '' }}>Maintenance</option>
+                            <option value="lost" {{ 'selected' if item.status == 'lost' else '' }}>Lost</option>
+                        </select>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

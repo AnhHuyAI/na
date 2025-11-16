@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Đơn #{{ booking.booking_code }} - Admin{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Đơn hàng #{{ booking.booking_code }}</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Trạng thái: <span class="badge bg-{{ booking.get_status_badge_class() }}">{{ booking.get_status_display() }}</span></h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Khách hàng:</strong> {{ booking.customer_name }} ({{ booking.customer_phone }})</p>
+                <p><strong>CCCD:</strong> {{ booking.customer_id_card }}</p>
+                <p><strong>Thời gian:</strong> {{ booking.rental_start.strftime('%d/%m/%Y %H:%M') }} - {{ booking.rental_end.strftime('%d/%m/%Y %H:%M') }}</p>
+            </div>
+        </div>
+
+        {% if booking.status == 'PENDING' %}
+        <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Gán mã bộ đồ</h5></div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.approve_booking', booking_id=booking.id) }}">
+                    {% for item in booking.items %}
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{{ item.product_name }}</strong></label>
+                        <select class="form-select" name="inventory_{{ item.id }}" required>
+                            <option value="">-- Chọn mã --</option>
+                            {% for inv in available_items[item.id] %}
+                            <option value="{{ inv.id }}">{{ inv.item_code }} ({{ inv.size }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endfor %}
+
+                    <div class="mb-3">
+                        <label for="admin_notes" class="form-label">Ghi chú</label>
+                        <textarea class="form-control" id="admin_notes" name="admin_notes" rows="2"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Duyệt đơn</button>
+                </form>
+
+                <form method="POST" action="{{ url_for('admin.reject_booking', booking_id=booking.id) }}" class="mt-3">
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Lý do từ chối</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="2" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Từ chối đơn</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if booking.status == 'APPROVED' %}
+        <form method="POST" action="{{ url_for('admin.mark_renting', booking_id=booking.id) }}">
+            <button type="submit" class="btn btn-success">Xác nhận đã giao đồ (→ RENTING)</button>
+        </form>
+        {% endif %}
+
+        {% if booking.status == 'RENTING' or booking.status == 'LATE' %}
+        <form method="POST" action="{{ url_for('admin.mark_returned', booking_id=booking.id) }}">
+            <div class="mb-3">
+                <label class="form-label">Tình trạng đồ</label>
+                <select class="form-select" name="condition" required>
+                    <option value="ok">OK - Không vấn đề</option>
+                    <option value="damaged">Hư hỏng</option>
+                    <option value="lost">Mất</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Xác nhận đã nhận đồ trả</button>
+        </form>
+        {% endif %}
+
+        {% if booking.status == 'RETURNED_CLEANING' %}
+        <form method="POST" action="{{ url_for('admin.cleaning_completed', booking_id=booking.id) }}">
+            <button type="submit" class="btn btn-success">Giặt xong → COMPLETED</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Tổng kết</h5></div>
+            <div class="card-body">
+                <p>Subtotal: {{ "{:,}".format(booking.subtotal|int) }}đ</p>
+                <p>Giảm giá: -{{ "{:,}".format(booking.discount_amount|int) }}đ</p>
+                <p>Phạt: +{{ "{:,}".format(booking.penalty_amount|int) }}đ</p>
+                <hr>
+                <h4>Tổng: {{ "{:,}".format(booking.get_final_amount()|int) }}đ</h4>
+
+                <a href="{{ url_for('admin.add_penalty', booking_id=booking.id) }}" class="btn btn-warning btn-sm mt-3">Thêm phạt</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

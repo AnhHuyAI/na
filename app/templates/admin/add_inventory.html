@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Thêm bộ đồ - Admin{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Thêm bộ đồ mới</h1>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="product_id" class="form-label">Sản phẩm</label>
+        <select class="form-select" id="product_id" name="product_id" required>
+            <option value="">-- Chọn sản phẩm --</option>
+            {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="item_code" class="form-label">Mã bộ đồ</label>
+        <input type="text" class="form-control" id="item_code" name="item_code" required>
+        <small class="text-muted">Ví dụ: VEST-001, SHOE-A-123</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="size" class="form-label">Size (tùy chọn)</label>
+        <input type="text" class="form-control" id="size" name="size">
+    </div>
+
+    <div class="mb-3">
+        <label for="color" class="form-label">Màu sắc (tùy chọn)</label>
+        <input type="text" class="form-control" id="color" name="color">
+    </div>
+
+    <div class="mb-3">
+        <label for="condition_notes" class="form-label">Ghi chú tình trạng</label>
+        <textarea class="form-control" id="condition_notes" name="condition_notes" rows="2"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm bộ đồ</button>
+    <a href="{{ url_for('admin.inventory') }}" class="btn btn-secondary">Hủy</a>
+</form>
+{% endblock %}
